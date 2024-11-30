@@ -1,9 +1,24 @@
 import mongoose from "mongoose";
 
-import 'dotenv/config';
+import "dotenv/config";
 import connectDB from "./db/index.js";
+import app from "./app.js";
+import constants from "./constants.js";
 
-connectDB();
+connectDB()
+  .then(() => {
+    app.on("error", (error) => {
+      console.log("error: ", error);
+      throw error;
+    });
+    app.listen(constants.port || 8000, () => {
+      console.log(`server is running at port: ${constants.port}`);
+    });
+  })
+  .catch((error) => {
+    console.log(`mongoDB connection failed !!! , ${error}`);
+  });
+
 /*
 import express from "express";
 const app = express();
